@@ -5,9 +5,9 @@ This project analyzes 1, 2 and 3 bedroom home sale prices in the Manhattan, NY, 
 
 The analysis contains the following:
 
--Data Directory (files to load and clean-up data)
--Analysis Directory (summations utilizing clean data)
--Paper Directory (file containing results of our analysis)
+/Data Directory (files to load and clean-up data)
+/Analysis Directory (summations utilizing clean data)
+/ Summary Directory (file containing results of our analysis)
 
 Project Team: Sam Coyne, Ariel Francisco, Rob Rivens
 SMU Data Science - Section 402
