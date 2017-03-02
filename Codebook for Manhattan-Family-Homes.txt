@@ -1,0 +1,73 @@
+Codebook for Manhattan-Family-Homes
+
+This project analyzes 1, 2 and 3 bedroom home sale prices in the Manhattan, NY, housing market. 
+The data is derived from the Rolling Data Sales website, at http://www1.nyc.gov/home/search/index.page?search-terms=Rolling+sales+update.
+
+List of all variables in the raw data:
+
+BOROUGH
+NEIGHBORHOOD
+BUILDING.CLASS.CATEGORY
+TAX.CLASS.AT.PRESENT          
+BLOCK                       
+LOT                           
+EASE.MENT                    
+BUILDING.CLASS.AT.PRESENT     
+ADDRESS                       
+APARTMENT.NUMBER              
+ZIP.CODE                      
+RESIDENTIAL.UNITS             
+COMMERCIAL.UNITS              
+TOTAL.UNITS                   
+LAND.SQUARE.FEET              
+GROSS.SQUARE.FEET             
+YEAR.BUILT                    
+TAX.CLASS.AT.TIME.OF.SALE    
+BUILDING.CLASS.AT.TIME.OF.SALE
+SALE.PRICE                    
+SALE.DATE
+
+List of clean variables:
+
+manhattan - object used to store CSV of manhattan data. Note first four obs deleted before loading
+
+manhattan.sale - object used to store the homes with an actual sale price
+
+manhattan$sale.price.n -intermediate object used to store data in cleaning process
+
+manhattan$gross.sqft - gross sq. ft of residence
+
+manhattan$land.sqft - sq. ft of property
+
+manhattan$year.built - when the home was built
+
+manhattan.homes - object used to store 'family' homes (building class category = FAMILY)
+
+manahttan.homes.outliers - defines outliers as sale price (log10) <= 5 
+
+manhattan.homes - object to exclude outliers
+
+
+Code to obtain tidy data set:
+
+#write function (T/F) to count 0's True = $0 sale price
+manhattan$SALE.PRICE.N <- as.numeric(gsub("[^[:digit:]]","", manhattan$SALE.PRICE))
+count(is.na(manhattan$SALE.PRICE.N))
+
+#change headers to lower case
+names(manhattan) <- tolower(names(manhattan))
+
+## Get rid of leading digits
+manhattan$gross.sqft <- as.numeric(gsub("[^[:digit:]]","", manhattan$gross.square.feet))
+manhattan$land.sqft <- as.numeric(gsub("[^[:digit:]]","", manhattan$land.square.feet))
+
+#change this from character to numeric
+manhattan$year.built <- as.numeric(as.character(manhattan$year.built))
+manhattan$year.built
+
+## for now, let's look at 1-, 2-, and 3-family homes #grepl returns TRUE if string contains "FAMILY"
+manhattan.homes <- manhattan.sale[which(grepl("FAMILY",manhattan.sale$building.class.category)),]
+
+## remove outliers that seem like they weren't actual sales
+manhattan.homes$outliers <- (log10(manhattan.homes$sale.price.n) <=5) + 0
+manhattan.homes <- manhattan.homes[which(manhattan.homes$outliers==0),]
